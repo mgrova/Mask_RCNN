@@ -16,6 +16,7 @@ import colorsys
 import numpy as np
 from skimage.measure import find_contours
 import matplotlib.pyplot as plt
+plt.switch_backend('TkAgg') # Very Important in R Markdown with Rocker/VBox
 from matplotlib import patches,  lines
 from matplotlib.patches import Polygon
 import IPython.display
@@ -27,6 +28,7 @@ ROOT_DIR = os.path.abspath("../")
 sys.path.append(ROOT_DIR)  # To find local version of the library
 from mrcnn import utils
 
+import cv2
 
 ############################################################
 #  Visualization
@@ -162,9 +164,15 @@ def display_instances(image, boxes, masks, class_ids, class_names,
             verts = np.fliplr(verts) - 1
             p = Polygon(verts, facecolor="none", edgecolor=color)
             ax.add_patch(p)
-    ax.imshow(masked_image.astype(np.uint8))
-    if auto_show:
-        plt.show()
+    
+        print(caption)
+    cv2.imshow('image',masked_image.astype(np.uint8))
+    k = cv2.waitKey(49)
+    if k == 27:         # wait for ESC key to exit
+        cv2.destroyAllWindows()
+    # ax.imshow(masked_image.astype(np.uint8))
+    # if auto_show:
+    #     plt.show()
 
 
 def display_differences(image,
